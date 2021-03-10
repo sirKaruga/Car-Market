@@ -1,0 +1,12 @@
+{
+  "name": "Car-market",
+  "displayName": "Car-market",
+  "expo": {
+    "name": "Car-market",
+    "slug": "Car-market",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
