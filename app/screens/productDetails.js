@@ -17,23 +17,26 @@ export default function productDetails(props) {
   const extract = props.route.params.productData;
   const [item, setitem] = React.useState({
     id: extract.id,
-    title: extract.title,
+    title: extract.name,
     location: extract.location,
     seller: extract.seller,
     contact: extract.contact,
     price: extract.price,
     condition: extract.condition,
     images: extract.images,
-    productDetails: extract.productDetails,
+    productDetails: extract.description,
   });
 
-  const modImages = item.images;
+  const modImages = Object.values(item.images);
   const newImages = [];
 
   modImages.forEach((element) => {
     newImages.push({ key: modImages.indexOf(element), value: element });
   });
 
+  // var filtered = newImages.filter(function (value, index, arr) {
+  //   return value != "";
+  // });
   // for (let i = 0; i < modImages.length; i++) {
   //   modImages.forEach((element) => {
   //     newImages.push({ key: i, value: element });
@@ -56,21 +59,17 @@ export default function productDetails(props) {
                   <TouchableOpacity
                     onPress={() =>
                       props.navigation.navigate("viewImage", {
-                        image: img.value,
+                        image: { uri: `${img.value}` },
                       })
                     }
                   >
-                    <Image style={[styles.itemImage]} source={img.value} />
+                    <Image
+                      style={[styles.itemImage]}
+                      source={{ uri: `${img.value}` }}
+                    />
                   </TouchableOpacity>
                 </View>
               ))}
-
-              {/* <View>
-                <Image
-                  style={[styles.itemImage]}
-                  source={require("../assets/car.png")}
-                />
-              </View> */}
             </ScrollView>
           </View>
 

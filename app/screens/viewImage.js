@@ -15,7 +15,7 @@ export default function viewImage(props) {
         height: 30,
       }}
     >
-      <Image style={{ resizeMode: "contain", width: "100%" }} source={image} />
+      <Image style={{ width: "100%" }} source={image} />
     </Animatable.View>
   );
 }

@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Image } from "react-native";
 import {
   FlatList,
   SafeAreaView,
-  StatusBar,
+  LogBox,
   StyleSheet,
   Text,
   View,
@@ -11,44 +11,7 @@ import {
 } from "react-native";
 import { MapPin, User } from "react-native-feather";
 import Ionicons from "react-native-vector-icons/Ionicons";
-
-const DATA = [
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    title: "First Item",
-    location: "Nairobi",
-    seller: "Dennis",
-    contact: "0786545678",
-    price: 230,
-    condition: "used",
-    images: [
-      require("../assets/luxury.jpg"),
-      require("../assets/carbrolet.jpg"),
-      require("../assets/pickup.png"),
-    ],
-
-    productDetails:
-      "Add the appropriate keys to your Info.plist, If you are allowing user to select image/video from photos, add NSPhotoLibraryUsageDescription. If you are allowing user to capture image add NSCameraUsageDescription key also. If you are allowing user to capture video add NSCameraUsageDescription add NSMicrophoneUsageDescription key also. Android No permissions required (saveToPhotos requires permission check). Note: This library does not require Manifest.permission.CAMERA, if your app declares as using this permission in manifest then you have to obtain the permission before using launchCamera.",
-  },
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28bajk",
-    title:
-      "Top-class toyota low cog type color red automatic from my garage to the",
-    location: "Nairobi",
-    seller: "Dennis",
-    contact: "0786545678",
-    price: 230,
-    condition: "used",
-    images: [
-      require("../assets/car.png"),
-      require("../assets/carbrolet.jpg"),
-      require("../assets/pickup.png"),
-    ],
-
-    productDetails:
-      "Add the appropriate keys to your Info.plist, If you are allowing user to select image/video from photos, add NSPhotoLibraryUsageDescription. If you are allowing user to capture image add NSCameraUsageDescription key also. If you are allowing user to capture video add NSCameraUsageDescription add NSMicrophoneUsageDescription key also. Android No permissions required (saveToPhotos requires permission check). Note: This library does not require Manifest.permission.CAMERA, if your app declares as using this permission in manifest then you have to obtain the permission before using launchCamera.",
-  },
-];
+import firebaseDB from "../firebase";
 
 const Item = ({ image, item, onPress, style }) => (
   <TouchableOpacity onPress={onPress} style={[styles.item, style]}>
@@ -57,9 +20,9 @@ const Item = ({ image, item, onPress, style }) => (
         <Image style={styles.itemImage} source={image} />
         <View style={{ alignSelf: "center", flex: 4 }}>
           <Text style={styles.item}>
-            {item.title.length > 50
-              ? item.title.slice(0, 50).concat("...")
-              : item.title}
+            {item.name.length > 50
+              ? item.name.slice(0, 50).concat("...")
+              : item.name}
           </Text>
           <Text>
             <MapPin stroke="grey" fill="#fff" width={15} name="map-pin" />
@@ -104,16 +67,33 @@ const Item = ({ image, item, onPress, style }) => (
 
 const Flatlist = (props) => {
   const [selectedId, setSelectedId] = useState(null);
+  const [rowDATA, setRowDATA] = useState([]);
+  const [returns, setreturns] = useState(false);
+  const cat = props.route.params.cat;
+  const [arr, setArr] = useState([]);
+  LogBox.ignoreAllLogs();
+  useEffect(() => {
+    firebaseDB
+      .database()
+      .ref("collection")
+      .on("value", (snapshot) => {
+        let data = [];
+        snapshot.forEach((child) => {
+          if (child.val().cartegory === cat) {
+            data.push(child.val());
+          }
+        });
+        setArr(data);
+      });
+  }, []);
 
-  const page = props.route.params.source;
-  const image = require("../assets/carbrolet.jpg");
-  //
+  console.log(cat);
 
   const renderItem = ({ item }) => {
     const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
     return (
       <Item
-        image={item.images[0]}
+        image={{ uri: `${item.images.imgUrl1}` }}
         item={item}
         onPress={() => {
           props.navigation.navigate("ProductDetails", { productData: item });
@@ -126,7 +106,7 @@ const Flatlist = (props) => {
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        data={DATA}
+        data={arr}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         extraData={selectedId}
@@ -139,12 +119,12 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "rgb(220,220,220)",
     flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
+    //marginTop: StatusBar.currentHeight || 0,
   },
   item: {
     fontSize: 15,
     marginVertical: 3,
-    marginHorizontal: 5,
+    marginHorizontal: 0,
   },
   itemCardTopSection: {
     flexDirection: "row",

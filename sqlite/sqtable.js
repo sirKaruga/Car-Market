@@ -36,29 +36,4 @@ export default class SQLiteScreen extends React.Component {
   render() {
     return <Text>this is important</Text>;
   }
-
-  // ExecuteQuery = (sql, params = []) =>
-  //   new Promise((resolve, reject) => {
-  //     db.transaction((trans) => {
-  //       trans.executeSql(
-  //         sql,
-  //         params,
-  //         (trans, results) => {
-  //           resolve(results);
-  //         },
-  //         (error) => {
-  //           reject(error);
-  //         }
-  //       );
-  //     });
-  //   });
-
-  // // Create Table
-  // async CreateTable() {
-  //   let Table = await this.executeQuery(
-  //     "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY NOT NULL, first_name VARCHAR(16), last_name VARCHAR(16), is_deleted INTEGER)",
-  //     []
-  //   );
-  //   console.log(Table);
-  // }
 }

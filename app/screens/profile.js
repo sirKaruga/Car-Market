@@ -13,9 +13,9 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { ShoppingBag, MapPin } from "react-native-feather";
 import * as ImagePicker from "expo-image-picker";
 import { State } from "react-native-gesture-handler";
-import * as SQLite from "expo-sqlite";
+import "../../sqlite/sqliteglobal.js";
 
-const db = SQLite.openDatabase("silkyMarket.db");
+const db = global.db;
 
 const profile = ({ navigation }) => {
   // control form registration details

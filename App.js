@@ -16,18 +16,9 @@ import SqliteScreen from "./sqlite/sqtable";
 import Flatlist from "./app/screens/flatlist";
 import Login from "./app/screens/login";
 import ViewImage from "./app/screens/viewImage";
+import { store } from "./app/store/";
+import { Provider } from "react-redux";
 
-// global.db = SQLite.openDatabase(
-//   {
-//     name: "silkyMarket",
-//     location: "default",
-//     createFromLocation: "~SQLite.db",
-//   },
-//   () => {},
-//   (error) => {
-//     console.log("ERROR: " + error);
-//   }
-// );
 function SettingsScreen() {
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -79,42 +70,33 @@ const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="Home"
-          component={Tabs}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="Products"
-          component={Flatlist}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="ProductDetails"
-          component={ProductDetails}
-        />
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="viewImage"
-          component={ViewImage}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Home"
+            component={Tabs}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Products"
+            component={Flatlist}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="ProductDetails"
+            component={ProductDetails}
+          />
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="viewImage"
+            component={ViewImage}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 
-// var firebaseConfig = {
-//   apiKey: "AIzaSyCn1Sm8P-pgmsHe-n3iLD52LMk0ovTk2J0",
-//   authDomain: "silkymarket-6036a.firebaseapp.com",
-//   projectId: "silkymarket-6036a",
-//   storageBucket: "silkymarket-6036a.appspot.com",
-//   messagingSenderId: "463420618338",
-//   appId: "1:463420618338:web:e817961bc3a14c4ca8c33b",
-//   measurementId: "G-Q1K9YCB91M",
-// };
-// // Initialize Firebase
-// firebase.initializeApp(firebaseConfig);
-// firebase.analytics();
+

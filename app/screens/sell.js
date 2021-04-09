@@ -31,6 +31,7 @@ export default function sell() {
     condition: "",
     price: "",
     location: "",
+    description: "",
   });
 
   useEffect(() => {
@@ -83,6 +84,9 @@ export default function sell() {
     if (field === "price") {
       setProduct({ ...product, price: val });
     }
+    if (field === "description") {
+      setProduct({ ...product, description: val });
+    }
   };
 
   // handle product submit
@@ -132,15 +136,15 @@ export default function sell() {
               }
               style={{ color: "grey" }}
             >
-              <Picker.Item label="Small car" value="electronics" />
-              <Picker.Item label="pick-up" value="electronics" />
-              <Picker.Item label="van" value="fashion" />
-              <Picker.Item label="SUV" value="smartphones" />
-              <Picker.Item label="Small truck" value="computers" />
-              <Picker.Item label="Heavy Truck" value="cars" />
-              <Picker.Item label="Carbrolet" value="services" />
-              <Picker.Item label="luxury" value="jobs" />
-              <Picker.Item label="electric car" value="property" />
+              <Picker.Item label="Small car" value="Small car" />
+              <Picker.Item label="pick-up" value="pick-up" />
+              <Picker.Item label="van" value="van" />
+              <Picker.Item label="SUV" value="SUV" />
+              <Picker.Item label="Small truck" value="Small truck" />
+              <Picker.Item label="Heavy Truck" value="Heavy Truck" />
+              <Picker.Item label="Carbrolet" value="Carbrolet" />
+              <Picker.Item label="luxury" value="luxury" />
+              <Picker.Item label="electric car" value="electric car" />
             </Picker>
           </View>
 
@@ -221,7 +225,7 @@ export default function sell() {
               multiline={true}
               placeholderTextColor={"grey"}
               numberOfLines={4}
-              onChangeText={(data) => console.log(data)}
+              onChangeText={(val) => handleChange(val, "description")}
             />
           </View>
         </Card>
