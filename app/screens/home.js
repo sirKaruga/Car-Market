@@ -12,10 +12,10 @@ import {
   Button,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import Flatlist from "./flat2";
-import NoInternet from "../components/noInternet";
+import Item from "../components/item";
+//import NoInternet from "../components/noInternet";
 import "../../sqlite/sqliteglobal.js";
-import { store } from "../store/";
+//import { store } from "../store/";
 import { useSelector, useDispatch } from "react-redux";
 
 const db = global.db;
@@ -343,7 +343,7 @@ export default function home({ navigation }) {
             </Text>
             {/* top items */}
 
-            <Flatlist />
+            <Item />
 
             {/* top items */}
           </View>

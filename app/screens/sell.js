@@ -22,12 +22,25 @@ export default function sell() {
     image1: null,
     image2: null,
     image3: null,
+    image4: null,
+    image5: null,
+    image6: null,
   });
 
   const [product, setProduct] = useState({
     name: "",
+    cartegory: "Small car",
+    model: "",
+    condition: "used",
+    price: "",
+    location: "",
+    description: "",
+  });
+
+  const [err, seterr] = useState({
+    name: "",
     cartegory: "",
-    brand: "",
+    model: "",
     condition: "",
     price: "",
     location: "",
@@ -37,9 +50,8 @@ export default function sell() {
   useEffect(() => {
     (async () => {
       if (Platform.OS !== "web") {
-        const {
-          status,
-        } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        const { status } =
+          await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== "granted") {
           alert("Sorry, we need camera roll permissions to make this work!");
         }
@@ -49,7 +61,6 @@ export default function sell() {
 
   // handle the image picker buttons
   const pickImage = async (id) => {
-    console.log(id);
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: false,
@@ -58,35 +69,24 @@ export default function sell() {
     });
 
     if (!result.cancelled) {
-      if (id === "image1") {
-        setImage({ ...image, image1: result.uri });
-      }
-      if (id === "image2") {
-        setImage({ ...image, image2: result.uri });
-      }
-      if (id === "image3") {
-        setImage({ ...image, image3: result.uri });
-      }
+      setImage({ ...image, [id]: result.uri });
     }
   };
 
   // handle other input change values
   const handleChange = (val, field) => {
-    if (field === "location") {
-      setProduct({ ...product, location: val });
+    setProduct({ ...product, [field]: val });
+  };
+
+  //handle end editing err
+  const onEndEditing = (field) => {
+    if (product[field] === "") {
+      seterr({ ...err, [field]: true });
+    } else {
+      seterr({ ...err, [field]: "" });
     }
-    if (field === "name") {
-      setProduct({ ...product, name: val });
-    }
-    if (field === "brand") {
-      setProduct({ ...product, brand: val });
-    }
-    if (field === "price") {
-      setProduct({ ...product, price: val });
-    }
-    if (field === "description") {
-      setProduct({ ...product, description: val });
-    }
+
+    console.log(product[field]);
   };
 
   // handle product submit
@@ -114,7 +114,10 @@ export default function sell() {
               placeholder="e.g Toyota Fielder"
               onChangeText={(val) => handleChange(val, "name")}
               errorStyle={{ color: "red" }}
-              errorMessage="Product name is required"
+              onBlur={() => onEndEditing("name")}
+              errorMessage={
+                err.name === true ? "Product name is required" : null
+              }
               leftIcon={<ShoppingBag name="user" size={24} color="black" />}
             />
           </View>
@@ -152,8 +155,12 @@ export default function sell() {
             <Text style={{ fontSize: 18, fontStyle: "italic" }}>Brand</Text>
             <Input
               placeholder="e.g Toyota"
-              onChangeText={(val) => handleChange(val, "brand")}
+              onChangeText={(val) => handleChange(val, "model")}
               errorStyle={{ color: "red" }}
+              onBlur={() => onEndEditing("model")}
+              errorMessage={
+                err.model === true ? "Vehicle Model is required" : null
+              }
               leftIcon={<Ionicons name="logo-buffer" size={24} color="black" />}
             />
           </View>
@@ -186,7 +193,10 @@ export default function sell() {
               placeholder="Price in ksh."
               onChangeText={(val) => handleChange(val, "price")}
               errorStyle={{ color: "red" }}
-              errorMessage="Product price is required"
+              onBlur={() => onEndEditing("price")}
+              errorMessage={
+                err.price === true ? "Vehicle Price is required" : null
+              }
               leftIcon={
                 <Ionicons name="ios-cash-outline" size={24} color="black" />
               }
@@ -199,7 +209,10 @@ export default function sell() {
               placeholder="Your location"
               errorStyle={{ color: "red" }}
               onChangeText={(val) => handleChange(val, "location")}
-              errorMessage="Location is required"
+              onBlur={() => onEndEditing("location")}
+              errorMessage={
+                err.location === true ? "Your Location is required" : null
+              }
               leftIcon={<MapPin size={24} color="black" />}
             />
           </View>
@@ -225,8 +238,14 @@ export default function sell() {
               multiline={true}
               placeholderTextColor={"grey"}
               numberOfLines={4}
+              onBlur={() => onEndEditing("description")}
               onChangeText={(val) => handleChange(val, "description")}
             />
+            {err.description === true ? (
+              <div style={{ color: "red" }}>
+                Vehicle description is required
+              </div>
+            ) : null}
           </View>
         </Card>
       </Animatable.View>
@@ -277,6 +296,56 @@ export default function sell() {
               )}
             </Card>
           </TouchableOpacity>
+        </View>
+        <View
+          style={{
+            flex: 2,
+            flexDirection: "row",
+            alignContent: "stretch",
+            width: "100%",
+          }}
+        >
+          {image.image3 !== null ? (
+            <TouchableOpacity onPress={() => pickImage("image4")}>
+              <Card marginHorizontal={5} marginVertical={0} style={{ flex: 1 }}>
+                <Text>Image 4</Text>
+                {image && (
+                  <Image
+                    source={{ uri: image.image4 }}
+                    style={{ width: 50, height: 50 }}
+                  />
+                )}
+              </Card>
+            </TouchableOpacity>
+          ) : null}
+
+          {image.image4 !== null ? (
+            <TouchableOpacity onPress={() => pickImage("image5")}>
+              <Card marginHorizontal={5} marginVertical={0} style={{ flex: 1 }}>
+                <Text>Image 5</Text>
+                {image && (
+                  <Image
+                    source={{ uri: image.image5 }}
+                    style={{ width: 50, height: 50 }}
+                  />
+                )}
+              </Card>
+            </TouchableOpacity>
+          ) : null}
+
+          {image.image5 !== null ? (
+            <TouchableOpacity onPress={() => pickImage("image6")}>
+              <Card marginHorizontal={5} marginVertical={0} style={{ flex: 1 }}>
+                <Text>Image 6</Text>
+                {image && (
+                  <Image
+                    source={{ uri: image.image6 }}
+                    style={{ width: 50, height: 50 }}
+                  />
+                )}
+              </Card>
+            </TouchableOpacity>
+          ) : null}
         </View>
       </Card>
       <TouchableOpacity
